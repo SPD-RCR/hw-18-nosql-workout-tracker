@@ -32,12 +32,6 @@ router.put("/api/workouts/:id", ({ body, params }, res) => {
       res.send(data);
     }
   })
-  .then(dbWorkouts => {
-          res.json(dbWorkouts);
-        })
-        .catch(err => {
-          res.status(400).json(err);
-        });
 
 });
 
