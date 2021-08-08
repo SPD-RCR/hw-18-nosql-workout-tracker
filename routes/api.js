@@ -35,47 +35,22 @@ router.put("/api/workouts/:id", ({ body, params }, res) => {
 
 });
 
-// app.post("/update/:id", (req, res) => {
-//   db.notes.update(
-//     {
-//       _id: mongojs.ObjectId(req.params.id)
-//     },
-//     {
-//       $set: {
-//         title: req.body.title,
-//         note: req.body.note,
-//         modified: Date.now()
-//       }
-//     },
-//     (error, data) => {
-//       if (error) {
-//         res.send(error);
-//       } else {
-//         res.send(data);
-//       }
-//     }
-//   );
-// });
 
-// router.post("/api/transaction/bulk", ({ body }, res) => {
-//   Transaction.insertMany(body)
-//     .then(dbTransaction => {
-//       res.json(dbTransaction);
-//     })
-//     .catch(err => {
-//       res.status(400).json(err);
-//     });
-// });
-
-// router.get("/api/transaction", (req, res) => {
-//   Transaction.find({})
-//     .sort({ date: -1 })
-//     .then(dbTransaction => {
-//       res.json(dbTransaction);
-//     })
-//     .catch(err => {
-//       res.status(400).json(err);
-//     });
-// });
+router.get("/api/workouts", (req, res) => {
+Workout.aggregate( [
+  {
+    $addFields: {
+      totalWeight: { $sum: "$exercises.weight" } ,
+      totalDuration: { $sum: "$exercises.duration" }
+    }
+  }
+  ])
+  .then(dbWorkouts => {
+    res.json(dbWorkouts)
+  }) 
+  .catch(err => {
+    res.json(err)
+  })
+});
 
 module.exports = router;
