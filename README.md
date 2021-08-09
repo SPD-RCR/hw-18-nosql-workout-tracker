@@ -9,7 +9,7 @@ workoutTotalWeight = sum workout(exercise.map(_id, exercise.weight))
 
 sum 7 most recent workoutTotalWeight
 
-db.getCollection('workouts').findByDay(currentDay, 7,descending)
+db.getCollection('workouts').sort(Day: desc, limit: 7)
 
 MongoDB
 db.workouts.aggregate( [
@@ -18,7 +18,9 @@ db.workouts.aggregate( [
       totalWeight: { $sum: "$exercises.weight" } ,
       totalDuration: { $sum: "$exercises.duration" }
     }
-  }
+  },
+  { $sort: { day: -1 } },
+  { $limit: 7 }
 ])
 
 MongooseJS
